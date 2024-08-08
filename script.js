@@ -5,20 +5,31 @@ if(window.matchMedia("(pointer:fine)").matches) {
     tiltedSection.addEventListener('mousemove', handleEffect);
 
     function handleEffect(e) {
-        const tiltedSectionDimensions = tiltedSection.getBoundingClientRect();
+        setTimeout(() => {
+            const tiltedSectionDimensions = tiltedSection.getBoundingClientRect();
 
-        const mouseXInSection = e.clientX - tiltedSectionDimensions.left,
-            mouseYInSection = e.clientY - tiltedSectionDimensions.top;
+            const mouseXInSection = e.clientX - tiltedSectionDimensions.left,
+                mouseYInSection = e.clientY - tiltedSectionDimensions.top;
+    
+            const elementMiddleX = tiltedSectionDimensions.width / 2,
+                elementMiddleY = tiltedSectionDimensions.height / 2;
+    
+            const maxParallaX = 15,
+                maxParallaY = 15;
+    
+            const tiltAngleY = ((mouseXInSection - elementMiddleX) / elementMiddleX) * maxParallaX;
+            const tiltAngleX = ((mouseYInSection - elementMiddleY) / elementMiddleY) * maxParallaY;
+    
+            tiltedCard.style.transform = `rotateY(${tiltAngleY}deg) rotateX(${-tiltAngleX}deg)`;
+    
+            console.log(mouseXInSection, mouseYInSection);
+        }, 150)
+    }
 
-        const elementMiddleX = tiltedSectionDimensions.width / 2,
-            elementMiddleY = tiltedSectionDimensions.height / 2;
+    tiltedSection.addEventListener('mouseout', resetTilt);
 
-        const maxParallaX = 30,
-            maxParallaY = 30;
-
-        const tiltAngleY = ((mouseXInSection - elementMiddleX) / elementMiddleX) * maxParallaX
-
-        console.log(mouseXInSection, mouseYInSection);
+    function resetTilt() {
+        tiltedCard.style.transform = 'rotateY(0deg) rotateX(0deg)';
     }
 
 }
